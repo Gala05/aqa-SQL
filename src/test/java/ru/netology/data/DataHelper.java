@@ -1,16 +1,28 @@
 package ru.netology.data;
 
+import com.github.javafaker.Faker;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
 
+import java.util.Locale;
+
 public class DataHelper {
+    private static Faker faker = new Faker(new Locale("en"));
+
     private DataHelper() {
     }
 
     public static AuthInfo getAuthInfoWithTestData() {
         return new AuthInfo("vasya", "qwerty123");
+    }
+
+    private static String generateRandomPassword() {
+        return faker.internet().password();
+    }
+    public static AuthInfo generateRandomPassworForUserVasya() {
+        return new AuthInfo("vasya", generateRandomPassword());
     }
 
     @Value
