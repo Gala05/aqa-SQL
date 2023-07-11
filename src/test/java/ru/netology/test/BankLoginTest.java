@@ -2,6 +2,7 @@ package ru.netology.test;
 
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
 import ru.netology.data.SQLHelper;
@@ -20,7 +21,7 @@ public class BankLoginTest {
     void shouldSuccessfulLogin() {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.getAuthInfoWithTestData();
-        var verificationPage = loginPage.validLogin(authInfo);
+        var verificationPage = loginPage.makeValidLogin(authInfo);
         var verificationCode = SQLHelper.getVerificationCode();
         verificationPage.validVerify(verificationCode.getCode());
     }
@@ -30,11 +31,13 @@ public class BankLoginTest {
     void shouldBlockedUser() {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.generateRandomPassworForUserVasya();
-        loginPage.invalidLogin(authInfo);
+        loginPage.makeInvalidLogin(authInfo);
         loginPage.clearFields();
-        loginPage.invalidLogin(authInfo);
+        loginPage.makeInvalidLogin(authInfo);
         loginPage.clearFields();
-        loginPage.invalidLogin(authInfo);
-        SQLHelper.checkingForABlockedUser();
+        loginPage.makeInvalidLogin(authInfo);
+        String blockedName = SQLHelper.checkingForABlockedUser();
+        String name = "vasya";
+        Assertions.assertEquals(blockedName, name);
     }
 }

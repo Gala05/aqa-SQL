@@ -3,7 +3,6 @@ package ru.netology.data;
 import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
-import org.junit.jupiter.api.Assertions;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,15 +29,15 @@ public class SQLHelper {
         return null;
     }
 
-    public static void checkingForABlockedUser() throws SQLException {
-        var code = "SELECT login FROM users WHERE login='vasya' AND status='blocked";
+    public static String checkingForABlockedUser() throws SQLException {
+        var code = "SELECT login FROM users WHERE login='vasya' AND status='blocked'";
         try (var conn = getConn()) {
             var check = runner.query(conn, code, new ScalarHandler<String>());
-            String name = "vasya";
-            Assertions.assertEquals(name, check);
+            return check;
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+        return null;
     }
 
     @SneakyThrows
